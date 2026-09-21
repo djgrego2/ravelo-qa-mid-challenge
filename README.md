@@ -83,4 +83,4 @@ demoqa throws ads and random js errors. we strip ads on visit and only ignore ex
 
 checkbox tree was too flaky so coverage is buttons + radio instead. api tests create real users and try to delete them in hooks.
 
-practice form sometimes accepts a bad email — we track that as DEF-001 in `DEFECTS.md`.
+practice form sometimes accepts a bad email. We track that as DEF-001 in `DEFECTS.md`.
