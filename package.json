@@ -1,0 +1,50 @@
+{
+  "name": "ravelo-qa-mid-challenge",
+  "version": "1.0.0",
+  "description": "ravelo qa automation challenge",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "test": "cypress run --spec \"cypress/e2e/**/*.feature\"",
+    "test:ui": "cypress run --expose tags=@ui",
+    "test:api": "cypress run --expose tags=@api",
+    "test:hybrid": "cypress run --expose tags=@hybrid",
+    "test:smoke": "cypress run --expose tags=@smoke",
+    "test:accessibility": "cypress run --expose tags=@accessibility",
+    "report:open": "start cypress/reports/html/index.html",
+    "report:brand": "tsx scripts/apply-revelo-report-branding.ts",
+    "lint": "eslint cypress cypress.config.ts",
+    "format": "prettier --write cypress cypress.config.ts eslint.config.mjs",
+    "format:check": "prettier --check cypress cypress.config.ts eslint.config.mjs"
+  },
+  "license": "ISC",
+  "engines": {
+    "node": ">=22"
+  },
+  "cypress-cucumber-preprocessor": {
+    "stepDefinitions": [
+      "cypress/e2e/step_definitions/**/*.ts"
+    ],
+    "filterSpecs": true,
+    "omitFiltered": true
+  },
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^28.0.0",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.2",
+    "cypress": "^16.1.0",
+    "cypress-mochawesome-reporter": "^5.0.0",
+    "cypress-multi-reporters": "^2.0.5",
+    "cypress-on-fix": "^1.1.0",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.11.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-cypress": "^7.0.2",
+    "mocha-junit-reporter": "^2.2.1",
+    "prettier": "^3.9.8",
+    "tsx": "^4.23.15",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.70.0"
+  }
+}

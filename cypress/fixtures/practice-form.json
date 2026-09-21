@@ -1,0 +1,22 @@
+{
+  "valid": {
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "email": "jane.doe@test.com",
+    "mobile": "6123456789",
+    "gender": "Female",
+    "day": "15",
+    "month": "November",
+    "year": "1990",
+    "subject": "Maths",
+    "hobby": "Sports",
+    "address": "123 Test Street"
+  },
+  "invalidEmail": {
+    "firstName": "Test",
+    "lastName": "User",
+    "email": "not-an-email",
+    "mobile": "6000000000",
+    "gender": "Other"
+  }
+}

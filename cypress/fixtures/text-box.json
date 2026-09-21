@@ -1,0 +1,16 @@
+{
+  "cases": [
+    {
+      "name": "Jane Doe",
+      "email": "jane@test.com",
+      "currentAddress": "123 Main St",
+      "permanentAddress": "456 Oak Ave"
+    },
+    {
+      "name": "Alex Rivera",
+      "email": "alex.rivera@test.com",
+      "currentAddress": "88 River Rd",
+      "permanentAddress": "12 Hill Ln"
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+name: Cypress E2E
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+concurrency:
+  group: cypress-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+
+  cypress:
+    needs: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Smoke (pull requests)
+        if: github.event_name == 'pull_request'
+        uses: cypress-io/github-action@v6
+        with:
+          install: false
+          command: npm run test:smoke
+
+      - name: Full suite (push)
+        if: github.event_name != 'pull_request'
+        uses: cypress-io/github-action@v6
+        with:
+          install: false
+          command: npm test
+
+      - name: Revelo report branding
+        if: always()
+        run: npm run report:brand
+
+      - name: Bundle written docs with HTML report
+        if: always()
+        run: |
+          cp REPORT.md DEFECTS.md cypress/reports/html/
+          printf '%s\n' '<!DOCTYPE html><html><head><meta charset="utf-8"><title>QA reports</title></head><body>' > cypress/reports/html/readme.html
+          printf '%s\n' '<h1>QA reports</h1><ul>' >> cypress/reports/html/readme.html
+          printf '%s\n' '<li><a href="index.html">Mochawesome execution report</a></li>' >> cypress/reports/html/readme.html
+          printf '%s\n' '<li><a href="REPORT.md">REPORT.md</a></li>' >> cypress/reports/html/readme.html
+          printf '%s\n' '<li><a href="DEFECTS.md">DEFECTS.md</a></li>' >> cypress/reports/html/readme.html
+          printf '%s\n' '</ul></body></html>' >> cypress/reports/html/readme.html
+
+      - name: Upload JUnit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-results
+          path: cypress/reports/junit/
+          retention-days: 30
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-html-report
+          path: cypress/reports/html/
+          retention-days: 30
+
+      - name: Upload screenshots and videos on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-failure-artifacts
+          path: |
+            cypress/screenshots/
+            cypress/videos/
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Job summary
+        if: always()
+        run: |
+          {
+            echo "## Test reports"
+            echo ""
+            echo "Download the **mochawesome-html-report** artifact from this workflow run and open \`index.html\` locally."
+            if [ "${{ github.event_name }}" = "push" ]; then
+              echo ""
+              echo "After deploy finishes, the latest HTML report is also on **GitHub Pages** (see the \`deploy-report\` job)."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  deploy-report:
+    needs: cypress
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download HTML report
+        uses: actions/download-artifact@v4
+        with:
+          name: mochawesome-html-report
+          path: public
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

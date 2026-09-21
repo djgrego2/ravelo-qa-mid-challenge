@@ -1,0 +1,9 @@
+node_modules
+cypress/videos
+cypress/screenshots
+cypress/downloads
+.env
+
+# Reportes generados localmente (CI los crea de nuevo)
+cypress/reports/html/
+cypress/reports/junit/

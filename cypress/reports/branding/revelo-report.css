@@ -1,0 +1,89 @@
+/* Revelo palette (revelo.com) — overrides Mochawesome 6 CSS variables + module class names */
+
+:root {
+  --revelo-purple: #7455ff;
+  --revelo-navy: #070047;
+  --revelo-lilac: #c2c7ff;
+  --revelo-bg: #f5f5f7;
+  --revelo-accent: #00e0ff;
+
+  /* Mochawesome theme tokens (report uses these, not plain .navbar) */
+  --bluegrey800: #070047;
+  --bluegrey900: #050030;
+  --green100: #e8e4ff;
+  --green200: #c2c7ff;
+  --green300: #9b8aff;
+  --green500: #7455ff;
+  --green700: #5a3fd4;
+  --brand-success: #7455ff;
+  --ltblue500: #00e0ff;
+  --grey100: #f5f5f7;
+  --grey300: #e4e4ea;
+}
+
+body {
+  background-color: var(--revelo-bg) !important;
+}
+
+#revelo-report-banner {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.85rem 1.5rem;
+  background: linear-gradient(135deg, var(--revelo-navy) 0%, var(--revelo-purple) 100%);
+  color: #fff;
+  box-shadow: 0 4px 24px rgba(7, 0, 71, 0.2);
+  position: relative;
+  z-index: 1041;
+}
+
+#revelo-report-banner img {
+  height: 36px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+#revelo-report-banner .revelo-report-subtitle {
+  font-family: system-ui, Segoe UI, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+/* Fixed navbar (CSS modules: navbar--component---*) */
+[class*='navbar--component'] {
+  background: linear-gradient(90deg, var(--revelo-navy) 0%, #2d1a8a 55%, var(--revelo-purple) 100%) !important;
+  border-bottom: 3px solid var(--revelo-accent) !important;
+  top: 3.25rem !important;
+  min-height: 3.5rem !important;
+  height: 3.5rem !important;
+}
+
+[class*='navbar--report-info'] h1,
+[class*='navbar--report-info'] [class*='report-info--title'] {
+  color: #fff !important;
+}
+
+[class*='side-nav'],
+[class*='side-nav__'] {
+  border-color: var(--revelo-lilac) !important;
+}
+
+[class*='side-nav'] [class*='active'],
+[class*='side-nav__item'][class*='active'] {
+  border-left-color: var(--revelo-purple) !important;
+}
+
+[class*='chart'] {
+  border-color: var(--revelo-lilac) !important;
+}
+
+[class*='lozenge-pass'],
+[class*='checkmark--pass'],
+.text-success {
+  color: var(--revelo-purple) !important;
+}
+
+[class*='footer--'] {
+  border-top-color: var(--revelo-lilac) !important;
+}
